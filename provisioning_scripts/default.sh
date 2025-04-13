@@ -1,15 +1,15 @@
 #!/bin/bash
-source /venv/main/bin/activate
 set -e # Exit immediately if a command exits with a non-zero status.
-# set -x # Uncomment for detailed command execution logging
-wget ... || { echo "Download failed"; exit 1; }
+source /venv/main/bin/activate
+
 echo "Starting custom setup script for A1111..."
 
+# --- Add Git safety config ---
 export GIT_CONFIG_GLOBAL=/tmp/temporary-git-config
 git config --file $GIT_CONFIG_GLOBAL --add safe.directory '*'
 
 # --- Configuration ---
-A1111_DIR="/opt/workspace-internal/stable-diffusion-webui" # Confirmed path from logs/docs
+A1111_DIR="/opt/workspace-internal/stable-diffusion-webui" # Docker-compatible path
 SD_MODEL_DIR="$A1111_DIR/models/Stable-diffusion"
 CN_MODEL_DIR="$A1111_DIR/models/ControlNet"
 SAM_MODEL_DIR="$A1111_DIR/models/sam" # For Segment Anything models (manual download needed)
@@ -64,7 +64,8 @@ echo "Checking for SDXL model: $SDXL_MODEL_FILENAME..."
 if [ ! -s "$SDXL_MODEL_FILE_PATH" ] # Check if file exists and is non-empty
 then
   echo "Downloading $SDXL_MODEL_FILENAME..."
-  wget -nv -O "$SDXL_MODEL_FILE_PATH.tmp" "$SDXL_MODEL_URL" --show-progress && mv "$SDXL_MODEL_FILE_PATH.tmp" "$SDXL_MODEL_FILE_PATH" || echo "ERROR: Failed to download SDXL model."
+  wget -nv -O "$SDXL_MODEL_FILE_PATH.tmp" "$SDXL_MODEL_URL" --show-progress || { echo "ERROR: SDXL download failed"; exit 1; }
+  mv "$SDXL_MODEL_FILE_PATH.tmp" "$SDXL_MODEL_FILE_PATH"
 else
   echo "SDXL model already exists, skipping download."
 fi
@@ -74,7 +75,8 @@ echo "Checking for ControlNet model: $CN_MODEL_FILENAME..."
 if [ ! -s "$CN_MODEL_FILE_PATH" ] # Check if file exists and is non-empty
 then
   echo "Downloading $CN_MODEL_FILENAME..."
-  wget -nv -O "$CN_MODEL_FILE_PATH.tmp" "$CN_MODEL_URL" --show-progress && mv "$CN_MODEL_FILE_PATH.tmp" "$CN_MODEL_FILE_PATH" || echo "ERROR: Failed to download ControlNet model."
+  wget -nv -O "$CN_MODEL_FILE_PATH.tmp" "$CN_MODEL_URL" --show-progress || { echo "ERROR: ControlNet download failed"; exit 1; }
+  mv "$CN_MODEL_FILE_PATH.tmp" "$CN_MODEL_FILE_PATH"
 else
   echo "ControlNet model already exists, skipping download."
 fi
@@ -93,8 +95,6 @@ for ext_url in "${EXTENSIONS[@]}"; do
   fi
 done
 cd "$A1111_DIR" # Go back to A1111 base directory
-
-# --- REMOVED SECTION THAT MODIFIED webui-user.sh ---
 
 # --- Final Message ---
 echo "Custom setup script finished successfully."
