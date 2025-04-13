@@ -13,6 +13,8 @@ COPY ./ROOT /
 # Copy our custom default.sh script
 COPY default.sh /opt/default.sh
 
+RUN chmod +x /opt/supervisor-scripts/a1111.sh
+
 # Required or we will not build
 ARG A1111_REF
 
