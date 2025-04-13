@@ -1,11 +1,15 @@
 #!/bin/bash
+source /venv/main/bin/activate
 set -e # Exit immediately if a command exits with a non-zero status.
 # set -x # Uncomment for detailed command execution logging
-
+wget ... || { echo "Download failed"; exit 1; }
 echo "Starting custom setup script for A1111..."
 
+export GIT_CONFIG_GLOBAL=/tmp/temporary-git-config
+git config --file $GIT_CONFIG_GLOBAL --add safe.directory '*'
+
 # --- Configuration ---
-A1111_DIR="/workspace/stable-diffusion-webui" # Confirmed path from logs/docs
+A1111_DIR="/opt/workspace-internal/stable-diffusion-webui" # Confirmed path from logs/docs
 SD_MODEL_DIR="$A1111_DIR/models/Stable-diffusion"
 CN_MODEL_DIR="$A1111_DIR/models/ControlNet"
 SAM_MODEL_DIR="$A1111_DIR/models/sam" # For Segment Anything models (manual download needed)
