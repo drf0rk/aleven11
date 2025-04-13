@@ -29,10 +29,13 @@ RUN \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui && \
     cd /opt/workspace-internal/stable-diffusion-webui && \
     git checkout "${A1111_REF}" && \
+    # Copy and run setup script
+    chmod +x /opt/default.sh && \
+    /opt/default.sh && \
+    # Install dependencies
     pip install --no-cache-dir \
         -r requirements_versions.txt && \
     # Make our default.sh script executable and set it up for provisioning
-    chmod +x /opt/default.sh && \
     ln -sf /opt/default.sh /etc/vastai-provisioning/default.sh && \
     # Quick startup test in CPU mode to ensure requirements ready and startup succeeds
     cd /opt/workspace-internal/stable-diffusion-webui && \
