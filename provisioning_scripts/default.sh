@@ -17,8 +17,6 @@ EXT_DIR="$A1111_DIR/extensions"
 
 # List of extensions to clone (ensure Mikubill/sd-webui-controlnet is included if needed by other extensions, otherwise omit)
 EXTENSIONS=(
-
-EXTENSIONS_TO_INSTALL=(
     "https://github.com/AUTOMATIC1111/stable-diffusion-webui-promptgen"
     "https://github.com/continue-revolution/sd-webui-segment-anything"
     "https://github.com/modelscope/facechain"
@@ -39,8 +37,8 @@ EXTENSIONS_TO_INSTALL=(
 )
 
 # SDXL Model URL and Filename
-SDXL_MODEL_URL="https://huggingface.co/Red1618/tEST2/resolve/main/Schlip.safetensors"
-SDXL_MODEL_FILENAME="Schlip.safetensors"
+SDXL_MODEL_URL=""
+SDXL_MODEL_FILENAME=""
 
 # ControlNet Model URL and desired Filename
 CN_MODEL_URL="https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/main/diffusion_pytorch_model_promax.safetensors"
